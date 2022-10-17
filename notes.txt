@@ -1,0 +1,8 @@
+pink highliter lower/upper values
+160 133 127   172 255 255
+h_min = 160
+h_max = 172
+s_min = 133
+s_max = 255
+v_min = 127
+v_max = 255
