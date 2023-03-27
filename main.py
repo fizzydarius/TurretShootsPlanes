@@ -63,7 +63,7 @@ while True:
         # the big question is do i make it round or does it just cut up before it reaches decimal points (aka turn it into an int)
         x_coord = int(x_min+(box_width/2))
         y_coord = int(y_min+(box_height/2))
-        cv2.circle(frame,(x_coord,y_coord),radius=2,color=(255,0,0),thickness=1)
+        cv2.circle(frame,(x_coord,y_coord),radius=2,color=(0,0,255),thickness=1)
 
 
     hStack = np.hstack([frame,results ])
