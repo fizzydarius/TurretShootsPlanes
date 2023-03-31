@@ -1,0 +1,10 @@
+Documentation, write about the hardships of getting the motor button to work (variable name the same and i was trying to make it global but it was global
+                                                                                by default)
+
+Fix Y-Offsett of elements on the main window and screenshot the code for that and update the documentation (not the writing, just images)
+
+Adjust the window size so it's not as long and no unused space is used 
+
+Try and mess around with the activeBG for the MOTOR button because when you click it it flashes white (write about it)
+
+---- Try to make it so 3 leds up when you press the buttons respectively 
