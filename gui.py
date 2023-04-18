@@ -1,7 +1,7 @@
 from tkinter import *
 
 window = Tk() # Initiate an instance of a window 
-window.geometry("800x800")
+window.geometry("800x400")
 window.title("Turret Shoots Planes")
 icon = PhotoImage(file="car.png")
 window.iconphoto(True,icon)
@@ -24,7 +24,7 @@ hardButton = Button(window,
                 bg="#c72828",
                 activeforeground="black",
                 activebackground="#a62121")
-hardButton.grid(row=0,column=2,columnspan=2,padx=(0,30))
+hardButton.grid(row=0,column=2,columnspan=2,padx=(0,30),pady=(40,0))
 
 
 def easyMode():
@@ -40,7 +40,7 @@ easyButton = Button(window,
                 bg="#319e3c",
                 activeforeground="black",
                 activebackground="#236e2b")
-easyButton.grid(row=0,column=5,columnspan=2)
+easyButton.grid(row=0,column=5,columnspan=2,pady=(40,0))
 
 
 
@@ -65,20 +65,21 @@ motorButton = Button(window,
                 font=("Comic Sans",30),
                 fg="black",
                 bg="#a32424")
-motorButton.grid(row=1,column=6)
-#i was struggling figuring out the logic for the function. My problem was that I tried passing a global variable despite all variables outside of a function
-#being global by default and also my name for the function was the same as my name for the motorButton name of the variable
-ModeStatus = Label(window,
-            text="Difficulty mode: Easy",
-            font=('Calibri 15 bold'),
-            bg="#5b98c7")
-ModeStatus.grid(row=2,column=2)
+motorButton.grid(row=1,column=6,pady=(40,0))
 
 MotorLabel = Label(window,
             text="Motor mode: OFF",
             font=("Calibri 15 bold"),
             bg="#5b98c7")
 MotorLabel.grid(row=3,column=2)
+
+
+ModeStatus = Label(window,
+            text="Difficulty mode: Easy",
+            font=('Calibri 15 bold'),
+            bg="#5b98c7")
+ModeStatus.grid(row=2,column=2)
+
 
 
 window.mainloop() # Place window on computer screen, listens for events
