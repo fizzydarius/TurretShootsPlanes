@@ -1,4 +1,7 @@
 from tkinter import *
+import serial
+
+arduinoData = serial.Serial("COM3", 9600)
 
 window = Tk() # Initiate an instance of a window 
 window.geometry("800x400")
@@ -14,6 +17,9 @@ window.grid_columnconfigure(2, minsize=60)
 def hardMode():
     print("Hard mode activated!")
     ModeStatus["text"] = "Difficulty mode: Hard"
+    arduinoData.write(b"B")
+    arduinoData.write(b"C")
+    arduinoData.write(b"A")
 
 hardButton = Button(window,
                 text="Hard",
@@ -29,7 +35,10 @@ hardButton.grid(row=0,column=2,columnspan=2,padx=(0,30),pady=(40,0))
 
 def easyMode():
     print("Easy mode activated!")
-    ModeStatus["text"] = "Difficulty mode: Easy"    
+    ModeStatus["text"] = "Difficulty mode: Easy"
+    arduinoData.write(b"B")
+    arduinoData.write(b"C")
+    arduinoData.write(b"D")
 
 easyButton = Button(window,
                 text="Easy",

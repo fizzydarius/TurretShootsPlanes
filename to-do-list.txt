@@ -1,3 +1,49 @@
 Try and mess around with the activeBG for the MOTOR button because when you click it it flashes white (don't write about it, just change the code and replace.)
 
+Finish writing up changing the aspect ratio of the camera (pixels and whatnot), write up the lights changing in the Motor control section.
+
+
+
 ---- Try to make it so 3 leds up when you press the buttons respectively 
+
+
+
+const int redLED = 12;    // the pin that the LED is attached to RED
+const int yellowLED = 9;  // the pin that the LED is attached to YELLOW
+int incomingByte;       // a variable to read incoming serial data into
+
+void setup() {
+  // initialize serial communication:
+  Serial.begin(9600);
+  // initialize the LED pin as an output:
+  pinMode(redLED, OUTPUT);
+  pinMode(yellowLED, OUTPUT);
+}
+
+void loop() {
+  // see if there's incoming serial data:
+  if (Serial.available() > 0) {
+    // read the oldest byte in the serial buffer:
+    incomingByte = Serial.read();
+    // if it's a capital H (ASCII 72), turn on the LED:
+    if (incomingByte == 'A') {
+      digitalWrite(redLED, HIGH);
+      // test to see if the if statment worksSerial.print("redON");
+    }
+    // if it's an L (ASCII 76) turn off the LED:
+    if (incomingByte == 'B') {
+      digitalWrite(redLED, LOW);
+      // test to see if the if statment worksSerial.print("redOFF");
+    }
+    if (incomingByte == 'C') {
+      digitalWrite(yellowLED, LOW);
+      // test to see if the if statment worksSerial.print("yellowOFF");
+    }
+    if (incomingByte == 'D') {
+      digitalWrite(yellowLED, HIGH);
+      // test to see if the if statment works Serial.print("yellowON");
+    }
+    // test for incomingByte value Serial.print(incomingByte);
+    // test for HR value Serial.print('HR');
+  }
+}

@@ -5,13 +5,16 @@ import numpy as np
 #Setting up the capture
 cap = cv2.VideoCapture(0)
 
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+
 def emtpy(x):
     pass
 
 #Creating track bar to help track a certain colour
 #In my testing case I'm using an orange debit card
 cv2.namedWindow("HSV")
-cv2.resizeWindow("HSV", 640, 240)
+cv2.resizeWindow("HSV", 1280, 720)
 cv2.createTrackbar("HUE Min", "HSV", 0,179,emtpy)
 cv2.createTrackbar("HUE Max", "HSV", 0,179,emtpy)
 cv2.createTrackbar("SAT Min", "HSV", 0,255,emtpy)
@@ -25,6 +28,7 @@ while True:
 
     #Telling the program to record from webcam
     ret, frame = cap.read()
+    frame = cv2.resize(frame, None, None, fx=0.5, fy=0.5)
 
     #Creating a new Colourspace in HSV which makes it easeir for computers to see colours
     ImageHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
