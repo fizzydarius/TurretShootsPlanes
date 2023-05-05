@@ -1,4 +1,3 @@
-Try and mess around with the activeBG for the MOTOR button because when you click it it flashes white (don't write about it, just change the code and replace.)
 
 Finish writing up changing the aspect ratio of the camera (pixels and whatnot), write up the lights changing in the Motor control section.
 

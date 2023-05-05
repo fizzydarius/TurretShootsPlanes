@@ -1,11 +1,14 @@
 import serial
 
-arduinoData = serial.Serial("com3",9600)
+arduinoData = serial.Serial("COM3",9600)
 
-def led_on():
-    arduinoData.write(b"1")
+def __init__():
+    arduinoData.write(b"LR")
+    arduinoData.write(b"LY")
 
-def led_off():
-    arduinoData.write(b"0")
+def red_led_on():
+    arduinoData.write(b"HR")
 
-led_on()
+def yellow_led_on():
+    arduinoData.write(b"HY")
+
