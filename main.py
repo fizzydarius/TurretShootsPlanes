@@ -21,21 +21,25 @@ cv2.createTrackbar("SAT Min", "HSV", 0,255,emtpy)
 cv2.createTrackbar("SAT Max", "HSV", 0,255,emtpy)
 cv2.createTrackbar("VALUE Min", "HSV", 0,255,emtpy)
 cv2.createTrackbar("VALUE Max", "HSV", 0,255,emtpy)
-windowOpen = True
+windowOpen = True # this is used as a variable to check if the window is open this will come usefull later :)
+
+
 
 #Loop to detect plane
 while True:
 
     #Telling the program to record from webcam
     ret, frame = cap.read()
-    frame = cv2.resize(frame, None, None, fx=1, fy=1)
+    # fx, fy = 0.5 when the window is open for accesability 
+    # fx, fy = 1 when the window is closed for accuracy in the calculations 
+    frame = cv2.resize(frame, None, None, fx=0.5, fy=0.5)
 
     #Creating a new Colourspace in HSV which makes it easeir for computers to see colours
     ImageHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     #Getting infromation from the trackbar window "HSV" and storing it into variables as integers 
     if windowOpen == True:
-        print (f"hello")
+        # print (f"hello") used for testing
         h_min = cv2.getTrackbarPos("HUE Min","HSV")
         h_max = cv2.getTrackbarPos("HUE Max","HSV")
         s_min = cv2.getTrackbarPos("SAT Min","HSV")
@@ -61,9 +65,11 @@ while True:
         #if any contours are found we take the biggest contour and get bounding box
         (x_min, y_min, box_width, box_height) = cv2.boundingRect(contours[0])
         #drawing a rectangle around the object with 15 as margin
-        cv2.rectangle(frame, (x_min - 15, y_min -15),
+        cv2.rectangle(frame, 
+                      (x_min - 15, y_min -15),
                       (x_min + box_width + 15, y_min + box_height + 15),
-                      (0,255,0), 4)
+                      (0,255,0), 
+                      4)
         # print (x_min,y_min,box_height,box_width)
         # Drew on a paper and realsed the middle is the x_min,y_min plus half of the boxes width and height respectfully
         # the big question is do i make it round or does it just cut up before it reaches decimal points (aka turn it into an int)
