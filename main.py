@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from tkinter import *
+
 
 class visualRecognition():
 
@@ -15,6 +17,7 @@ class visualRecognition():
     
         self.createWindow()
 
+    # Image Recognition code and function
     def empty(self,x):
         pass
 
@@ -89,5 +92,104 @@ class visualRecognition():
         self.cap.release()
         cv2.destroyAllWindows()
 
-app = visualRecognition()
-app.main()
+
+
+class GUI():
+    def __init__(self):
+        
+        #variables
+        self.motorButtonClicked = False
+
+
+        #main window configurations and settings
+        self.window = Tk()
+        self.window.geometry("800x400")
+        self.window.title("Turret shoots planes")
+        icon = PhotoImage(file="car.png")
+        self.window.iconphoto(True, icon)
+        self.window.config(background="#5b98c7")
+
+        self.window.grid_columnconfigure(0, minsize = 40)
+        self.window.grid_columnconfigure(2, minsize = 60 )
+
+        #buttons 
+        self.hardButton = Button(self.window,
+                text="Hard",
+                padx = "100",
+                command= lambda: self.hardMode(),
+                font=("Comic Sans",30),
+                fg="black",
+                bg="#c72828",
+                activeforeground="black",
+                activebackground="#a62121")
+        self.hardButton.grid(row=0,column=2,columnspan=2,padx=(0,30),pady=(40,0))
+
+        self.easyButton = Button(self.window,
+                text="Easy",
+                padx = "100",
+                command= lambda: self.easyMode(),
+                font=("Comic Sans",30),
+                fg="black",
+                bg="#319e3c",
+                activeforeground="black",
+                activebackground="#236e2b")
+        self.easyButton.grid(row=0,column=5,columnspan=2,pady=(40,0))
+
+        self.motorButton = Button(self.window,
+                text = "Motor",
+                command= lambda: self.motorButtonColourChange(),
+                font=("Comic Sans",30),
+                fg="black",
+                bg="#a62121",
+                activebackground="#a62121")
+        self.motorButton.grid(row=1,column=6,pady=(40,0))
+
+
+
+        #labels
+        self.MotorLabel = Label(self.window,
+            text="Motor mode: OFF",
+            font=("Calibri 15 bold"),
+            bg="#5b98c7")
+        self.MotorLabel.grid(row=3,column=2)
+
+
+        self.ModeStatus = Label(self.window,
+            text="Difficulty mode: Easy",
+            font=('Calibri 15 bold'),
+            bg="#5b98c7")
+        self.ModeStatus.grid(row=2,column=2)
+
+
+        self.window.mainloop()
+
+    def motorButtonColourChange(self):
+        if self.motorButtonClicked == False:
+            print(f"Motor is activated!")
+            self.motorButton["bg"] = "#319e3c"
+            self.motorButtonClicked = True
+            self.MotorLabel["text"] = "Motor mode: ON"
+            self.motorButton["activebackground"] = "#236e2b"
+
+        elif self.motorButtonClicked == True:
+            print(f"Motor is deactivated!")
+            self.motorButton["bg"] = "#c72828"
+            self.motorButtonClicked = False
+            self.MotorLabel["text"] = "Motor mode: OFF"
+            self.motorButton["activebackground"] = "#a62121"
+
+    def hardMode(self):
+        print(f"Hard mode is activated!")
+        self.ModeStatus["text"] = "Difficulty mode: Hard"
+
+    def easyMode(self):
+        print(f"Easy mode activated!")
+        self.ModeStatus["text"] = "Difficulty mode: Easy"
+
+
+
+
+
+
+app = GUI()
+
