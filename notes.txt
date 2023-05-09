@@ -1,1 +1,8 @@
-if you're reading this, you smell (=>_<=)
+to do list:
+  --Make it so the windows close too, discuss with Mr Elton which windows to show and if it's worth it having the boundingRectangle and 
+    drawCircle as those are simply visual aids, but they won't be seen by the user once the calibration is turned off
+  --Prehaps make it so the motor cannot be turned on whilst the Calibration window is open and it won't shoot until the calibration window has been
+    opened at least once
+  --Look more into/ research what you actually need to send to the Arduino as a message and try to code a scrip that does that and import and use it in
+    the main.py script
+  
