@@ -91,7 +91,7 @@ class visualRecognition():
 
             if self.windowOpen == True:
                 cv2.imshow("hello world", hStack)
-
+                cv2.waitKey(1)
         self.cap.release()
         cv2.destroyAllWindows()
 
@@ -155,7 +155,8 @@ class GraphicalUserInterface():
                 font = ("Comic Sans", 30),
                 fg = "black",
                 bg = "#eb7134",
-                activebackground= "#c25d2b")
+                activebackground= "#c25d2b",
+                state= "normal")
         self.calibrationButton.grid(row=2, column=6, pady=(40,0))
 
         #labels
@@ -196,15 +197,18 @@ class GraphicalUserInterface():
             visualRec.main()
             self.calibrationButtonClicked = True
             self.calibrationCounter += 1
+            self.calibrationButton["state"] = "Disabled" 
             print(f"Initial calibration in progress")
         else:
             if self.calibrationButtonClicked == False:
                 self.calibrationButtonClicked = True
+                self.calibrationButton["state"] = "disabled" 
                 visualRec.createWindow()
                 print(f"Calibration in progress")
 
             elif self.calibrationButtonClicked == True:
                 self.calibrationButtonClicked = False
+                self.calibrationButton["state"] = "normal" 
                 visualRec.destroyWindow()
                 print(f"Calibration over")
 
