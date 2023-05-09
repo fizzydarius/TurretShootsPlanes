@@ -30,14 +30,19 @@ class visualRecognition():
         cv2.createTrackbar("SAT Max", "HSV", self.lastS_max,255,self.empty)
         cv2.createTrackbar("VALUE Min", "HSV", self.lastV_min,255,self.empty)
         cv2.createTrackbar("VALUE Max", "HSV", self.lastV_max,255,self.empty)
+
         self.windowOpen = True
 
+    def destroyWindow(self):
+        self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max = self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max
+        cv2.destroyAllWindows()
+        self.windowOpen = False
     def windowOptions(self):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return "stopLoop"
         if cv2.waitKey(1) & 0xFF == ord('a'):
             self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max = self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max
-            cv2.destroyWindow("HSV")
+            cv2.destroyAllWindows()
             self.windowOpen = False
             return "runLoop"
         if cv2.waitKey(1) & 0xFF == ord('d'):
@@ -56,7 +61,7 @@ class visualRecognition():
 
         self.lower = np.array([self.lastH_min,self.lastS_min,self.lastV_min])
         self.upper = np.array([self.lastH_max,self.lastS_max,self.lastV_max])
-        print((f"{self.lower}, {self.upper}"))
+        #print((f"{self.lower}, {self.upper}"))
 
     def main(self):
         while True:
@@ -84,10 +89,9 @@ class visualRecognition():
 
             hStack = np.hstack([frame,results])
 
-            cv2.imshow("hello world", hStack)
+            if self.windowOpen == True:
+                cv2.imshow("hello world", hStack)
 
-            if self.windowOptions() == "stopLoop":
-                break
         self.cap.release()
         cv2.destroyAllWindows()
 
@@ -98,6 +102,8 @@ class GraphicalUserInterface():
         
         #variables
         self.motorButtonClicked = False
+        self.calibrationButtonClicked = False
+        self.calibrationCounter = 0 
 
 
         #main window configurations and settings
@@ -157,14 +163,14 @@ class GraphicalUserInterface():
             text="Motor mode: OFF",
             font=("Calibri 15 bold"),
             bg="#5b98c7")
-        self.MotorLabel.grid(row=3,column=2)
+        self.MotorLabel.grid(row=2,column=2)
 
 
         self.ModeStatus = Label(self.window,
             text="Difficulty mode: Easy",
             font=('Calibri 15 bold'),
             bg="#5b98c7")
-        self.ModeStatus.grid(row=2,column=2)
+        self.ModeStatus.grid(row=1,column=2, pady=(100,0))
 
 
         self.window.mainloop()
@@ -184,6 +190,24 @@ class GraphicalUserInterface():
             self.MotorLabel["text"] = "Motor mode: OFF"
             self.motorButton["activebackground"] = "#a62121"
 
+    def calibrationMode(self):
+        if self.calibrationCounter == 0:
+            visualRec = visualRecognition()
+            visualRec.main()
+            self.calibrationButtonClicked = True
+            self.calibrationCounter += 1
+            print(f"Initial calibration in progress")
+        else:
+            if self.calibrationButtonClicked == False:
+                self.calibrationButtonClicked = True
+                visualRec.createWindow()
+                print(f"Calibration in progress")
+
+            elif self.calibrationButtonClicked == True:
+                self.calibrationButtonClicked = False
+                visualRec.destroyWindow()
+                print(f"Calibration over")
+
     def hardMode(self):
         print(f"Hard mode is activated!")
         self.ModeStatus["text"] = "Difficulty mode: Hard"
@@ -192,14 +216,8 @@ class GraphicalUserInterface():
         print(f"Easy mode activated!")
         self.ModeStatus["text"] = "Difficulty mode: Easy"
 
-    def calibrationMode(self):
-        print(f"Calibration in progress")
 
 
-
-
-
-
-
-app = GraphicalUserInterface()
+if __name__ == "__main__":
+    GraphicalUserInterface()
 
