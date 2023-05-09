@@ -47,7 +47,6 @@ class visualRecognition():
     def trackbarPos(self):
         
         if self.windowOpen == True:
-            print(f"window is open")
             self.lastH_min = cv2.getTrackbarPos("HUE Min","HSV")
             self.lastH_max = cv2.getTrackbarPos("HUE Max","HSV")
             self.lastS_min = cv2.getTrackbarPos("SAT Min","HSV")
@@ -94,7 +93,7 @@ class visualRecognition():
 
 
 
-class GUI():
+class GraphicalUserInterface():
     def __init__(self):
         
         #variables
@@ -110,7 +109,7 @@ class GUI():
         self.window.config(background="#5b98c7")
 
         self.window.grid_columnconfigure(0, minsize = 40)
-        self.window.grid_columnconfigure(2, minsize = 60 )
+        self.window.grid_columnconfigure(2, minsize = 60)
 
         #buttons 
         self.hardButton = Button(self.window,
@@ -144,7 +143,14 @@ class GUI():
                 activebackground="#a62121")
         self.motorButton.grid(row=1,column=6,pady=(40,0))
 
-
+        self.calibrationButton = Button(self.window,
+                text = "Calibration",
+                command = lambda: self.calibrationMode(),
+                font = ("Comic Sans", 30),
+                fg = "black",
+                bg = "#eb7134",
+                activebackground= "#c25d2b")
+        self.calibrationButton.grid(row=2, column=6, pady=(40,0))
 
         #labels
         self.MotorLabel = Label(self.window,
@@ -186,10 +192,14 @@ class GUI():
         print(f"Easy mode activated!")
         self.ModeStatus["text"] = "Difficulty mode: Easy"
 
+    def calibrationMode(self):
+        print(f"Calibration in progress")
 
 
 
 
 
-app = GUI()
+
+
+app = GraphicalUserInterface()
 
