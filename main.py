@@ -1,22 +1,26 @@
 import cv2
 import numpy as np
 from tkinter import *
-
+import multiprocessing as mp
+import json
+import ar
 
 class visualRecognition():
 
-    def __init__(self):
+    def __init__(self, a, b , c , d , e ,f):
         self.cap = cv2.VideoCapture(0)
+        self.arduino = ar.Arduino()
+        self.guiWindow = False
 
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
         self.windowOpen = True
 
-        self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max = 0 , 0 , 0 , 0 , 0 , 0
-    
-        self.createWindow()
+        self.lastH_min, self.lastH_max, self.lastS_min, self.lastS_max, self.lastV_min, self.lastV_max = a , b , c , d , e , f
 
+        self.createWindow()
+    
     # Image Recognition code and function
     def empty(self,x):
         pass
@@ -70,7 +74,7 @@ class visualRecognition():
             ImageHSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             self.trackbarPos()
             mask = cv2.inRange(ImageHSV, self.lower, self.upper)
-            results = cv2.bitwise_and(frame, frame, mask = mask)
+            results = cv2.bitwise_and(frame, frame, mask = mask) 
             contours,_ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
             contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
@@ -85,13 +89,29 @@ class visualRecognition():
                 x_coord = int(x_min+(box_width/2))
                 y_coord = int(y_min+(box_height/2))
                 cv2.circle(frame,(x_coord,y_coord),radius=2,color=(0,0,255),thickness=1)
-                print(f"{x_coord}, {y_coord}")
+                print(self.arduino.coord(x_coord,y_coord))
 
             hStack = np.hstack([frame,results])
 
             if self.windowOpen == True:
                 cv2.imshow("hello world", hStack)
                 cv2.waitKey(1)
+            if self.windowOptions() == "stopLoop":
+                
+                dictionary = {
+                    "hmin": f"{self.lastH_min}",
+                    "hmax": f"{self.lastH_max}",
+                    "smin": f"{self.lastS_min}",
+                    "smax": f"{self.lastS_max}",
+                    "vmin": f"{self.lastV_min}",
+                    "vmax": f"{self.lastV_max}"
+				}
+                with open("sample.json", "w") as outfile:
+                     json.dump(dictionary, outfile)
+                
+                break
+			
+            
         self.cap.release()
         cv2.destroyAllWindows()
 
@@ -99,11 +119,9 @@ class visualRecognition():
 
 class GraphicalUserInterface():
     def __init__(self):
-        
         #variables
         self.motorButtonClicked = False
-        self.calibrationButtonClicked = False
-        self.calibrationCounter = 0 
+
 
 
         #main window configurations and settings
@@ -155,8 +173,7 @@ class GraphicalUserInterface():
                 font = ("Comic Sans", 30),
                 fg = "black",
                 bg = "#eb7134",
-                activebackground= "#c25d2b",
-                state= "normal")
+                activebackground= "#c25d2b")
         self.calibrationButton.grid(row=2, column=6, pady=(40,0))
 
         #labels
@@ -174,6 +191,7 @@ class GraphicalUserInterface():
         self.ModeStatus.grid(row=1,column=2, pady=(100,0))
 
 
+    def startWindow(self):
         self.window.mainloop()
 
     def motorButtonColourChange(self):
@@ -192,25 +210,16 @@ class GraphicalUserInterface():
             self.motorButton["activebackground"] = "#a62121"
 
     def calibrationMode(self):
-        if self.calibrationCounter == 0:
-            visualRec = visualRecognition()
-            visualRec.main()
-            self.calibrationButtonClicked = True
-            self.calibrationCounter += 1
-            self.calibrationButton["state"] = "Disabled" 
-            print(f"Initial calibration in progress")
-        else:
-            if self.calibrationButtonClicked == False:
-                self.calibrationButtonClicked = True
-                self.calibrationButton["state"] = "disabled" 
-                visualRec.createWindow()
-                print(f"Calibration in progress")
-
-            elif self.calibrationButtonClicked == True:
-                self.calibrationButtonClicked = False
-                self.calibrationButton["state"] = "normal" 
-                visualRec.destroyWindow()
-                print(f"Calibration over")
+        data = json.load(open('sample.json'))
+        a = int(data['hmin'])
+        b = int(data['hmax'])
+        c = int(data['smin'])
+        d = int(data['smax'])
+        e = int(data['vmin'])
+        f = int(data['vmax'])
+        visualRec = visualRecognition(a, b , c , d , e , f)
+        program = mp.Process(target= visualRec.main(), args=())
+        program.start()
 
     def hardMode(self):
         print(f"Hard mode is activated!")
@@ -220,8 +229,8 @@ class GraphicalUserInterface():
         print(f"Easy mode activated!")
         self.ModeStatus["text"] = "Difficulty mode: Easy"
 
-
-
 if __name__ == "__main__":
-    GraphicalUserInterface()
-
+    gui = GraphicalUserInterface()
+    program2 = mp.Process(target= gui.startWindow(), args=())
+    program2.start()
+    program2.join()
