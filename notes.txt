@@ -1,8 +1,40 @@
-to do list:
-  --Make it so the windows close too, discuss with Mr Elton which windows to show and if it's worth it having the boundingRectangle and 
-    drawCircle as those are simply visual aids, but they won't be seen by the user once the calibration is turned off
-  --Prehaps make it so the motor cannot be turned on whilst the Calibration window is open and it won't shoot until the calibration window has been
-    opened at least once
-  --Look more into/ research what you actually need to send to the Arduino as a message and try to code a scrip that does that and import and use it in
-    the main.py script
-  
+const int redLED = 12;    // the pin that the LED is attached to RED
+const int yellowLED = 9;  // the pin that the LED is attached to YELLOW
+int incomingByte;         // a variable to read incoming serial data into
+const char id1 = 'incomingbyte';
+const char id2 = 'hr';
+
+void setup() {
+  // initialize serial communication:
+  Serial.begin(9600);
+  // initialize the LED pin as an output:
+  pinMode(redLED, OUTPUT);
+  pinMode(yellowLED, OUTPUT);
+}
+
+void loop() {
+  // see if there's incoming serial data:
+  if (Serial.available() > 0) {
+    // read the oldest byte in the serial buffer:
+    incomingByte = Serial.read();
+
+    if (incomingByte == 'A') {
+      digitalWrite(redLED, HIGH);
+      // test to see if the if statment worksSerial.print("redON");
+    }
+
+    if (incomingByte == 'B') {
+      digitalWrite(redLED, LOW);
+      // test to see if the if statment worksSerial.print("redOFF");
+    }
+    if (incomingByte == 'C') {
+      digitalWrite(yellowLED, LOW);
+      // test to see if the if statment worksSerial.print("yellowOFF");
+    }
+    if (incomingByte == 'D') {
+      digitalWrite(yellowLED, HIGH);
+      // test to see if the if statment works Serial.print("yellowON");
+    }
+
+  }
+}
